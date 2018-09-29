@@ -1,0 +1,275 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    tools:context="com.adara.yashsd.spiderbtremote.MainActivity">
+
+    <TextView
+        android:id="@+id/textView"
+        android:layout_width="match_parent"
+        android:layout_height="216px"
+        android:layout_alignParentTop="true"
+        android:layout_weight="0"
+        android:background="@color/colorPrimaryDark"
+        android:fontFamily="@font/bungee_hairline"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:text="DinkleBot Remote"
+        android:textColor="@color/colorWhite"
+        android:textSize="15dp"
+        android:textStyle="bold" />
+
+    <LinearLayout
+        android:id="@+id/mainLinearView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/textView"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/linear1"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal">
+
+            <ScrollView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:scrollbars="vertical">
+
+                <LinearLayout
+                    android:layout_width="640px"
+                    android:layout_height="864px"
+                    android:orientation="vertical">
+
+                    <Button
+                        android:id="@+id/b2"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="sit"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b3"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="stand"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b4"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="hand wave"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b5"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="hand shake"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b6"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="move right"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b7"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="move left"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b8"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="head up"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b9"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="head down"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b10"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="dance"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <Button
+                        android:id="@+id/b11"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="3dp"
+                        android:layout_marginRight="3dp"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="lights"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                </LinearLayout>
+
+            </ScrollView>
+
+            <LinearLayout
+                android:id="@+id/linear2"
+                android:layout_width="640px"
+                android:layout_height="864px"
+                android:orientation="vertical">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:text="Communication Logs:"
+                    android:textAlignment="center"
+                    android:textColor="@android:color/black"
+                    android:textStyle="bold" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="vertical">
+
+                    <TextView
+                        android:id="@+id/logs"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text=""
+                        android:textAlignment="center"
+                        android:textColor="@android:color/black"
+                        android:textStyle="bold"
+                        />
+
+
+                </ScrollView>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linear3"
+                android:layout_width="640px"
+                android:layout_height="804px"
+                android:orientation="vertical">
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <Button
+                        android:id="@+id/b13"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_gravity="top"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+
+                        android:text="Voice Command"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+
+                    <io.github.controlwear.virtual.joystick.android.JoystickView xmlns:custom="http://schemas.android.com/apk/res-auto"
+                        android:id="@+id/joy"
+                        android:layout_width="500px"
+                        android:layout_height="500px"
+                        android:layout_centerHorizontal="true"
+                        android:layout_centerVertical="true"
+                        custom:JV_backgroundColor="@color/colorWhite"
+                        custom:JV_borderColor="@color/colorBlack"
+                        custom:JV_borderWidth="4dp"
+                        custom:JV_buttonColor="@color/colorLightGray"
+                        custom:JV_buttonSizeRatio="15%"
+                        custom:JV_fixedCenter="true" />
+
+                    <Button
+                        android:id="@+id/b1"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/colorDarkGray"
+                        android:fontFamily="@font/bungee_hairline"
+                        android:text="Connect to Dinklebot"
+                        android:textColor="@color/colorWhite"
+                        android:textStyle="bold"
+                        android:typeface="sans" />
+                </RelativeLayout>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</RelativeLayout>
