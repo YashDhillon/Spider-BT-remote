@@ -10,8 +10,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.os.Handler;
 import android.os.Message;
+import android.speech.RecognizerIntent;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,14 +23,30 @@ import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.github.mikephil.charting.animation.Easing;
+import com.github.mikephil.charting.charts.RadarChart;
+import com.github.mikephil.charting.components.AxisBase;
+import com.github.mikephil.charting.components.Legend;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.RadarData;
+import com.github.mikephil.charting.data.RadarDataSet;
+import com.github.mikephil.charting.data.RadarEntry;
+import com.github.mikephil.charting.formatter.IAxisValueFormatter;
+import com.github.mikephil.charting.interfaces.datasets.IRadarDataSet;
 
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Set;
 import java.util.UUID;
 
@@ -43,118 +61,108 @@ public class MainActivity extends AppCompatActivity {
     private BluetoothSocket socket;
     private OutputStream outputStream;
 
-    Button b1, b2, b3, b4, b5, b6, b7, b8, b9, b10, b11;
+    Button b1, b2, b3, b4;
     JoystickView joy;
-    TextView logs;
+    TextView sonarpitch,sonarangle;
 
-    //final static public String VOICE = "VOICE";
-    //final static public String JOY = "JOY";
-    //final static public String BUTT = "BUTT";
-    //final static public String LOG = "LOG";
+    SeekBar radarx,radary,radarz;
 
+    public static final float MAX = 100f, MIN = 1f;
 
-    //private IntentFilter mIntentfilter;
+    public static final int NB_QUALITIES = 36;
 
-    /*private BroadcastReceiver mReciever = new BroadcastReceiver() {
+    private RadarChart chart;
+
+    final static public String DISTANCE = "DISTANCE";
+
+    ProgressBar distance;
+
+    private IntentFilter mIntentfilter;
+
+    private BroadcastReceiver mReciever = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            if (intent.getAction().equals(REFRESHRESULT)) {
-                String flowRate = intent.getExtras().getString("flowRate");
-                String tankStatus = intent.getExtras().getString("tankStatus");
-                String timeStatus = intent.getExtras().getString("timeStatus");
-                refreshResult(flowRate, tankStatus, timeStatus);
-                int flowRateInt = 0;
-                flowRateInt = Integer.parseInt(flowRate);
-                if (flowRateInt > 0) {
-                    tankAnimate(true, tankStatus);
-                } else {
-                    tankAnimate(false, tankStatus);
-                }
-            } else if (intent.getAction().equals(NORMALUPDATERESULT)) {
-                String flowRate = intent.getExtras().getString("flowRate");
-                String tankStatus = intent.getExtras().getString("tankStatus");
-                String timeStatus = intent.getExtras().getString("timeStatus");
-                tvFlowRate.setText(flowRate + "L/s");
-                tvRunTime.setText(timeStatus + "min");
-                donutProgressUpdate(tankStatus);
-                int flowRateInt = 0;
-                flowRateInt = Integer.parseInt(flowRate);
-                if (flowRateInt > 0) {
-                    tankAnimate(true, tankStatus);
-                } else {
-                    tankAnimate(false, tankStatus);
-                }
+            if (intent.getAction().equals(DISTANCE)) {
+                distance.setProgress(intent.getIntExtra("DISTANCE",0));
             }
         }
-    };*/
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        sonarangle = (TextView)findViewById(R.id.sonarangle);
+        sonarpitch = (TextView)findViewById(R.id.sonarpitch);
+
+        distance = (ProgressBar)findViewById(R.id.distance);
+
+        mIntentfilter = new IntentFilter();
+        mIntentfilter.addAction(DISTANCE);
+        registerReceiver(mReciever, mIntentfilter);
+
         if (checkPermission(Manifest.permission.BLUETOOTH) && checkPermission(Manifest.permission.BLUETOOTH_ADMIN)) {
         } else {
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.BLUETOOTH, Manifest.permission.BLUETOOTH_ADMIN},
                     007);
         }
-
-        //------------------------------------------------------------------------------------------
-        //mIntentfilter = new IntentFilter();
-        //mIntentfilter.addAction(VOICE);
-        //mIntentfilter.addAction(JOY);
-        //mIntentfilter.addAction(BUTT);
-        //mIntentfilter.addAction(LOG);
-        //registerReceiver(mReciever, mIntentfilter);
-        //------------------------------------------------------------------------------------------
-
-        logs = (TextView)findViewById(R.id.logs);
-
+    //----------------------------------------------------------------------------------------------
         joy = (JoystickView) findViewById(R.id.joy);
         joy.setOnMoveListener(new JoystickView.OnMoveListener() {
             @Override
             public void onMove(int angle, int strength) {
                 if (angle >= 45 && angle < 135) {
                     try {
-                        outputStream.write(("*f:#").getBytes());
+                        outputStream.write(("*0f:#").getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else if (angle >= 135 && angle < 225) {
                     try {
-                        outputStream.write(("*l:#").getBytes());
+                        outputStream.write(("*0l:#").getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else if (angle >= 225 && angle < 315) {
                     try {
-                        outputStream.write(("*b:#").getBytes());
+                        outputStream.write(("*0b:#").getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else if (angle >= 315 && angle <= 359) {
                     try {
-                        outputStream.write(("*r:#").getBytes());
+                        outputStream.write(("*0r:#").getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 } else if (angle >= 0 && angle < 45) {
                     try {
-                        outputStream.write(("*r:#").getBytes());
+                        outputStream.write(("*0r:#").getBytes());
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
                 }
             }
         }, 500);
-
-
+    //----------------------------------------------------------------------------------------------
         b1 = (Button) findViewById(R.id.b1);
         b1.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(MainActivity.this, Main2Activity.class);
-                startActivityForResult(i, 007);
+                Intent intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,RecognizerIntent.LANGUAGE_MODEL_FREE_FORM);
+                intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, Locale.getDefault());
+
+                if( intent.resolveActivity(getPackageManager()) != null)
+                {
+                    startActivityForResult(intent,006);
+                }
+                else
+                {
+                    Toast.makeText(MainActivity.this, "this feature is not supported by your device", Toast.LENGTH_SHORT).show();
+                }
+
             }
         });
 
@@ -162,12 +170,8 @@ public class MainActivity extends AppCompatActivity {
         b2.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    outputStream.write("%a:#".getBytes());
-                    displayCommLogs("User :: Sit down");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+                Intent i = new Intent(MainActivity.this, Main2Activity.class);
+                startActivityForResult(i, 007);
             }
         });
 
@@ -176,111 +180,96 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 try {
-                    outputStream.write("%b:#".getBytes());
-                    displayCommLogs("User :: Stand up");
+                    outputStream.write("%0b:#".getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
             }
         });
-
         b4 = (Button) findViewById(R.id.b4);
         b4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
-                    outputStream.write("%c:#".getBytes());
-                    displayCommLogs("User :: Wave hand");
+                    outputStream.write("%0c:#".getBytes());
+
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+            }
+        });
+    //----------------------------------------------------------------------------------------------
+    //----------------------------------------------------------------------------------------------
+        radarx = (SeekBar)findViewById(R.id.radarx);
+        radarx.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                try {
+                    outputStream.write(("!"+String.format("%03d", progress)+"#").getBytes());
+                    sonarangle.setText(progress+"");
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
 
-        b5 = (Button) findViewById(R.id.b5);
-        b5.setOnClickListener(new View.OnClickListener() {
+        radary = (SeekBar)findViewById(R.id.radary);
+        radary.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
             @Override
-            public void onClick(View v) {
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
                 try {
-                    outputStream.write("%d:#".getBytes());
-                    displayCommLogs("User :: Hand shake");
+                    outputStream.write(("@"+String.format("%03d", progress)+"#").getBytes());
+                    sonarpitch.setText(progress+"");
+                  } catch (IOException e) {
+                    e.printStackTrace();
+                }
+
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
+            }
+        });
+
+        radarz = (SeekBar)findViewById(R.id.radarz);
+        radarz.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+                try {
+                    outputStream.write(("^"+String.format("%03d", progress)+"#").getBytes());
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
+
             }
-        });
-        b6 = (Button) findViewById(R.id.b6);
-        b6.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                try {
-                    outputStream.write("%e:#".getBytes());
-                    displayCommLogs("User :: Move right");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            public void onStartTrackingTouch(SeekBar seekBar) {
+
             }
-        });
-        b7 = (Button) findViewById(R.id.b7);
-        b7.setOnClickListener(new View.OnClickListener() {
+
             @Override
-            public void onClick(View v) {
-                try {
-                    outputStream.write("%f:#".getBytes());
-                    displayCommLogs("User :: Move left");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+            public void onStopTrackingTouch(SeekBar seekBar) {
+
             }
         });
-        b8 = (Button) findViewById(R.id.b8);
-        b8.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    outputStream.write("%g:#".getBytes());
-                    displayCommLogs("User :: Head up");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        b9 = (Button) findViewById(R.id.b9);
-        b9.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    outputStream.write("%h:#".getBytes());
-                    displayCommLogs("User :: Head down");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        b10 = (Button) findViewById(R.id.b10);
-        b10.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    outputStream.write("%i:#".getBytes());
-                    displayCommLogs("User :: Dance");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
-        b11 = (Button) findViewById(R.id.b11);
-        b11.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                try {
-                    outputStream.write("%j:#".getBytes());
-                    displayCommLogs("User :: Lights");
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    //----------------------------------------------------------------------------------------------
     }
 
     //----------------------------------------------------------------------------------------------
@@ -300,8 +289,242 @@ public class MainActivity extends AppCompatActivity {
                     BTconnect();
                 }
             }
+        } else if (requestCode == 006) {
+            if (resultCode == RESULT_OK && data != null) {
+                ArrayList<String> result = data.getStringArrayListExtra(RecognizerIntent.EXTRA_RESULTS);
+                String speech = result.get(0);
+                if (speech.contains("forward")) {
+                    if (speech.contains("one") || speech.contains("1")) {
+                        try {
+                            outputStream.write(("$1f:#").getBytes());
+                            Toast.makeText(this, "$1f:#", Toast.LENGTH_SHORT).show();
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("two") || speech.contains("2")) {
+                        try {
+                            outputStream.write(("$2f:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("three") || speech.contains("3")) {
+                        try {
+                            outputStream.write(("$3f:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("four") || speech.contains("4")) {
+                        try {
+                            outputStream.write(("$4f:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("five") || speech.contains("5")) {
+                        try {
+                            outputStream.write(("$5f:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("six") || speech.contains("6")) {
+                        try {
+                            outputStream.write(("$6f:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("seven") || speech.contains("7")) {
+                        try {
+                            outputStream.write(("$7f:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("eight") || speech.contains("8")) {
+                        try {
+                            outputStream.write(("$8f:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("nine") || speech.contains("9")) {
+                        try {
+                            outputStream.write(("$9f:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else if (speech.contains("right")) {
+                    if (speech.contains("one") || speech.contains("1")) {
+                        try {
+                            outputStream.write(("$1r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("two") || speech.contains("2")) {
+                        try {
+                            outputStream.write(("$2r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("three") || speech.contains("3")) {
+                        try {
+                            outputStream.write(("$3r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("four") || speech.contains("4")) {
+                        try {
+                            outputStream.write(("$4r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("five") || speech.contains("5")) {
+                        try {
+                            outputStream.write(("$5r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("six") || speech.contains("6")) {
+                        try {
+                            outputStream.write(("$6r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("seven") || speech.contains("7")) {
+                        try {
+                            outputStream.write(("$7r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("eight") || speech.contains("8")) {
+                        try {
+                            outputStream.write(("$8r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("nine") || speech.contains("9")) {
+                        try {
+                            outputStream.write(("$9r:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }else if (speech.contains("left")) {
+                    if (speech.contains("one") || speech.contains("1")) {
+                        try {
+                            outputStream.write(("$1l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("two") || speech.contains("2")) {
+                        try {
+                            outputStream.write(("$2l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("three") || speech.contains("3")) {
+                        try {
+                            outputStream.write(("$3l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("four") || speech.contains("4")) {
+                        try {
+                            outputStream.write(("$4l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("five") || speech.contains("5")) {
+                        try {
+                            outputStream.write(("$5l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("six") || speech.contains("6")) {
+                        try {
+                            outputStream.write(("$6l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("seven") || speech.contains("7")) {
+                        try {
+                            outputStream.write(("$7l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("eight") || speech.contains("8")) {
+                        try {
+                            outputStream.write(("$8l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("nine") || speech.contains("9")) {
+                        try {
+                            outputStream.write(("$9l:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                } else if (speech.contains("back")) {
+                    if (speech.contains("one") || speech.contains("1")) {
+                        try {
+                            outputStream.write(("$1b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("two") || speech.contains("2")) {
+                        try {
+                            outputStream.write(("$2b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("three") || speech.contains("3")) {
+                        try {
+                            outputStream.write(("$3b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("four") || speech.contains("4")) {
+                        try {
+                            outputStream.write(("$4b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("five") || speech.contains("5")) {
+                        try {
+                            outputStream.write(("$5b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("six") || speech.contains("6")) {
+                        try {
+                            outputStream.write(("$6b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("seven") || speech.contains("7")) {
+                        try {
+                            outputStream.write(("$7b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("eight") || speech.contains("8")) {
+                        try {
+                            outputStream.write(("$8b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    } else if (speech.contains("nine") || speech.contains("9")) {
+                        try {
+                            outputStream.write(("$9b:#").getBytes());
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+            }
         }
     }
+
+
+
 
     //-----------------------------NEW BLUETOOTH COMM SYSTEM----------------------------------------
     public boolean BTinit() {
@@ -350,7 +573,7 @@ public class MainActivity extends AppCompatActivity {
         try {
             socket = device.createRfcommSocketToServiceRecord(PORT_UUID); //Creates a socket to handle the outgoing connection
             socket.connect();
-            displayCommLogs("System :: Connected to spider");
+            Toast.makeText(this, "System :: Connected to spider", Toast.LENGTH_SHORT).show();
         } catch (IOException e) {
             e.printStackTrace();
             connected = false;
@@ -362,6 +585,9 @@ public class MainActivity extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
+            connectedThread mConnectedThread = new connectedThread(socket);
+            mConnectedThread.start();
         }
 
         return connected;
@@ -387,13 +613,14 @@ public class MainActivity extends AppCompatActivity {
                 case 1: {
                     String writeMessage = new String(writeBuf);
                     writeMessage = writeMessage.substring(begin, end);
-
+                    Toast.makeText(MainActivity.this, writeMessage, Toast.LENGTH_SHORT).show();
                     char reply = writeMessage.charAt(0);
-
-                    if (reply == '0') {
-
-                    } else if (reply == '1') {
-
+                    if(reply == '@'){
+                        int DISTANCE = Integer.parseInt(writeMessage.substring(1));
+                        Intent broadcastIntent = new Intent();
+                        broadcastIntent.setAction(MainActivity.DISTANCE);
+                        broadcastIntent.putExtra("DISTANCE",DISTANCE);
+                        sendBroadcast(broadcastIntent);
                     }
                     break;
                 }
@@ -445,18 +672,6 @@ public class MainActivity extends AppCompatActivity {
             }
         }
     }
-    //----------------------------------------------------------------------------------------------
-
-    void displayCommLogs(String action){
-        SimpleDateFormat s = new SimpleDateFormat("ddMMyyyyhhmmss");
-        String format = s.format(new Date());
-
-        String finalStamp = "["+format.substring(0,2)+"/"+format.substring(2,4)+"/"+format.substring(4,8)
-                +"||"+format.substring(8,10)+":"+format.substring(10,12)+":"+format.substring(12)+"]- ";
-
-        logs.append("\n"+finalStamp+action+";");
-    }
-
     //----------------------------------------------------------------------------------------------
 
     private boolean checkPermission(String permission) {

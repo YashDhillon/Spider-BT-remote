@@ -17,7 +17,7 @@
         android:fontFamily="@font/bungee_hairline"
         android:gravity="center"
         android:paddingTop="10dp"
-        android:text="DinkleBot Remote"
+        android:text="Sonar Spider Remote"
         android:textColor="@color/colorWhite"
         android:textSize="15dp"
         android:textStyle="bold" />
@@ -25,7 +25,7 @@
     <LinearLayout
         android:id="@+id/mainLinearView"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="250dp"
         android:layout_below="@+id/textView"
         android:orientation="vertical">
 
@@ -46,135 +46,80 @@
                     android:layout_height="864px"
                     android:orientation="vertical">
 
-                    <Button
-                        android:id="@+id/b2"
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
+                        android:layout_margin="1dp"
                         android:fontFamily="@font/bungee_hairline"
-                        android:text="sit"
-                        android:textColor="@color/colorWhite"
+                        android:gravity="center"
+                        android:text="Sonar Control"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15dp"
                         android:textStyle="bold"
                         android:typeface="sans" />
 
-                    <Button
-                        android:id="@+id/b3"
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
+                        android:layout_margin="1dp"
                         android:fontFamily="@font/bungee_hairline"
-                        android:text="stand"
-                        android:textColor="@color/colorWhite"
+                        android:gravity="center"
+                        android:text="X-Axis:"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15dp"
                         android:textStyle="bold"
                         android:typeface="sans" />
 
-                    <Button
-                        android:id="@+id/b4"
+                    <SeekBar
+                        android:id="@+id/radarx"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_margin="1dp"
+                        android:max="180"
+                        android:progress="90" />
+
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
+                        android:layout_margin="1dp"
                         android:fontFamily="@font/bungee_hairline"
-                        android:text="hand wave"
-                        android:textColor="@color/colorWhite"
+                        android:gravity="center"
+                        android:text="Y-Axis:"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15dp"
                         android:textStyle="bold"
                         android:typeface="sans" />
 
-                    <Button
-                        android:id="@+id/b5"
+                    <SeekBar
+                        android:id="@+id/radary"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="match_parent"
+                        android:layout_height="25dp"
+                        android:layout_margin="1dp"
+                        android:max="180"
+                        android:progress="90" />
+
+                    <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
+                        android:layout_margin="1dp"
                         android:fontFamily="@font/bungee_hairline"
-                        android:text="hand shake"
-                        android:textColor="@color/colorWhite"
+                        android:gravity="center"
+                        android:text="Z-Axis:"
+                        android:textColor="@color/colorBlack"
+                        android:textSize="15dp"
                         android:textStyle="bold"
                         android:typeface="sans" />
 
-                    <Button
-                        android:id="@+id/b6"
+                    <SeekBar
+                        android:id="@+id/radarz"
+                        style="?android:attr/progressBarStyleHorizontal"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
-                        android:fontFamily="@font/bungee_hairline"
-                        android:text="move right"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold"
-                        android:typeface="sans" />
-
-                    <Button
-                        android:id="@+id/b7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
-                        android:fontFamily="@font/bungee_hairline"
-                        android:text="move left"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold"
-                        android:typeface="sans" />
-
-                    <Button
-                        android:id="@+id/b8"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
-                        android:fontFamily="@font/bungee_hairline"
-                        android:text="head up"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold"
-                        android:typeface="sans" />
-
-                    <Button
-                        android:id="@+id/b9"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
-                        android:fontFamily="@font/bungee_hairline"
-                        android:text="head down"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold"
-                        android:typeface="sans" />
-
-                    <Button
-                        android:id="@+id/b10"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
-                        android:fontFamily="@font/bungee_hairline"
-                        android:text="dance"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold"
-                        android:typeface="sans" />
-
-                    <Button
-                        android:id="@+id/b11"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginBottom="3dp"
-                        android:layout_marginRight="3dp"
-                        android:background="@color/colorDarkGray"
-                        android:fontFamily="@font/bungee_hairline"
-                        android:text="lights"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold"
-                        android:typeface="sans" />
+                        android:layout_height="25dp"
+                        android:layout_margin="1dp"
+                        android:max="180"
+                        android:progress="90" />
 
                 </LinearLayout>
 
@@ -184,35 +129,99 @@
                 android:id="@+id/linear2"
                 android:layout_width="640px"
                 android:layout_height="864px"
+                android:layout_gravity="center"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="25dp"
-                    android:fontFamily="@font/bungee_hairline"
-                    android:text="Communication Logs:"
-                    android:textAlignment="center"
-                    android:textColor="@android:color/black"
-                    android:textStyle="bold" />
+                    android:layout_height="wrap_content" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
 
-                <ScrollView
+
+                <TextView
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:scrollbars="vertical">
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:gravity="center"
+                    android:text="Sonar Reading"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
-                    <TextView
-                        android:id="@+id/logs"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fontFamily="@font/bungee_hairline"
-                        android:text=""
-                        android:textAlignment="center"
-                        android:textColor="@android:color/black"
-                        android:textStyle="bold"
-                        />
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:gravity="center"
+                    android:text="Angle:"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
+                <TextView
+                    android:id="@+id/sonarangle"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
 
-                </ScrollView>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:gravity="center"
+                    android:text="Pitch:"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:id="@+id/sonarpitch"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:gravity="center"
+                    android:text=""
+                    android:textColor="@color/colorBlack"
+                    android:textSize="15dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="1dp"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:gravity="center"
+                    android:text="distance:"
+                    android:textColor="@color/colorBlack"
+                    android:textSize="12dp"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+                <ProgressBar
+                    android:id="@+id/distance"
+                    style="?android:attr/progressBarStyleHorizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="25dp"
+                    android:layout_margin="1dp"
+                    android:max="100"
+                    android:progress="0" />
+
 
             </LinearLayout>
 
@@ -227,14 +236,13 @@
                     android:layout_height="match_parent">
 
                     <Button
-                        android:id="@+id/b13"
+                        android:id="@+id/b1"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_alignParentTop="true"
                         android:layout_gravity="top"
                         android:background="@color/colorDarkGray"
                         android:fontFamily="@font/bungee_hairline"
-
                         android:text="Voice Command"
                         android:textColor="@color/colorWhite"
                         android:textStyle="bold"
@@ -252,23 +260,69 @@
                         custom:JV_buttonColor="@color/colorLightGray"
                         custom:JV_buttonSizeRatio="15%"
                         custom:JV_fixedCenter="true" />
-
-                    <Button
-                        android:id="@+id/b1"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentBottom="true"
-                        android:background="@color/colorDarkGray"
-                        android:fontFamily="@font/bungee_hairline"
-                        android:text="Connect to Dinklebot"
-                        android:textColor="@color/colorWhite"
-                        android:textStyle="bold"
-                        android:typeface="sans" />
                 </RelativeLayout>
 
             </LinearLayout>
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_alignParentBottom="true"
+        android:orientation="horizontal">
+
+        <ScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:scrollbars="horizontal">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_alignParentBottom="true"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/b2"
+                    android:layout_width="638px"
+                    android:layout_height="145px"
+                    android:layout_marginRight="3px"
+                    android:background="@color/colorDarkGray"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:text="Connect To Spider"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <Button
+                    android:id="@+id/b3"
+                    android:layout_width="638px"
+                    android:layout_height="145px"
+                    android:layout_marginRight="3px"
+                    android:background="@color/colorDarkGray"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:text="Sonar pulse "
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+                <Button
+                    android:id="@+id/b4"
+                    android:layout_width="638px"
+                    android:layout_height="145px"
+                    android:background="@color/colorDarkGray"
+                    android:fontFamily="@font/bungee_hairline"
+                    android:text="Reset position"
+                    android:textColor="@color/colorWhite"
+                    android:textStyle="bold"
+                    android:typeface="sans" />
+
+            </LinearLayout>
+
+        </ScrollView>
 
     </LinearLayout>
 
